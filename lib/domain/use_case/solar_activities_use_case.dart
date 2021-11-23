@@ -18,4 +18,5 @@ class SolarActivitiesUseCase {
 
     return SolarActivities(lastFlare: flares.last, lastStorm: storms.last);
   }
+
 }

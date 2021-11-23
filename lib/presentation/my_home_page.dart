@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'home_state.dart';
 
@@ -38,4 +39,12 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(body: SafeArea(child: _body()));
   }
+}
+
+
+class TestCubit extends Cubit<int>{
+  TestCubit(int initialState) : super(initialState);
+
+  void increment() => emit(state + 1);
+
 }
