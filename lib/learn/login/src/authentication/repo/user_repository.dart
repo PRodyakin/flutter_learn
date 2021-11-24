@@ -2,7 +2,8 @@
 
 import 'package:uuid/uuid.dart';
 
-import 'models/user.dart';
+import '../models/user.dart';
+
 
 class UserRepository {
   User? _user;

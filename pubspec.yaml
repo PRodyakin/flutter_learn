@@ -47,6 +47,7 @@ dependencies:
   lottie: ^1.2.1
   mask_text_input_formatter: ^2.0.0
   shared_preferences: ^2.0.9
+  pin_code_fields: ^7.3.0
 
   flutter:
     sdk: flutter

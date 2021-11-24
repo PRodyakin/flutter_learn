@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:clean_arch_test/learn/login/src/models/user.dart';
 
 import 'package:equatable/equatable.dart';
 
-import '../authentication_repository.dart';
-import '../user_repository.dart';
+import 'repo/authentication_repository.dart';
+import 'repo/user_repository.dart';
+import 'models/user.dart';
 
 part 'authentication_event.dart';
 

@@ -1,4 +1,6 @@
 import 'package:clean_arch_test/learn/login/src/login/bloc/login_bloc.dart';
+import 'package:clean_arch_test/learn/login/src/sms_code/view/sms_code_page.dart';
+import 'package:clean_arch_test/learn/login/src/splash/splash_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,6 +18,9 @@ class LoginForm extends StatelessWidget {
             ..showSnackBar(
               const SnackBar(content: Text('Authentication Failure')),
             );
+        }
+        if(state.status.isSubmissionSuccess){
+          Navigator.push(context, MaterialPageRoute<void>(builder: (_) => SmsCodePage()));
         }
       },
       child: SafeArea(
@@ -82,7 +87,7 @@ class _PhoneInput extends StatelessWidget {
   final maskFormatter = MaskTextInputFormatter(
       mask: '+7 (###) ###-##-##',
       filter: {"#": RegExp(r'[0-9]')},
-      initialText: "+7 (");
+      initialText: "7");
 
   @override
   Widget build(BuildContext context) {
@@ -96,12 +101,13 @@ class _PhoneInput extends StatelessWidget {
           ],
           keyboardType: TextInputType.phone,
           onTap: () => maskFormatter.maskText(""),
-          onChanged: (userPhone) =>
-              context.read<LoginBloc>().add(LoginUserPhoneChanged(userPhone)),
+          onChanged: (userPhone) => context
+              .read<LoginBloc>()
+              .add(LoginUserPhoneChanged(maskFormatter.getUnmaskedText())),
           decoration: InputDecoration(
             filled: true,
             hintText: "+7",
-            errorText: state.userPhone.invalid ? 'Некорректный номер' : null,
+            errorText: state.userPhone.invalid ? state.status.toString() : null,
             border: OutlineInputBorder(),
           ),
         );
@@ -124,31 +130,48 @@ class _LoginButton extends StatelessWidget {
                   width: double.infinity,
                   child: ElevatedButton(
                     key: const Key('loginForm_continue_raisedButton'),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 20.0),
-                      child: const Text(
-                        'Начать',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                      ),
-                    ),
-                    onPressed: state.status.isValidated
-                        ? () {
-                            context
-                                .read<LoginBloc>()
-                                .add(const LoginSubmitted());
-                          }
-                        : null,
+                    child: ButtonText(),
+                    style: buildButtonStyle(),
+                    onPressed: onPressed(state, context),
                   ),
                 ),
               );
       },
+    );
+  }
+
+  onPressed(LoginState state, BuildContext context) {
+    return state.status.isValidated
+        ? () {
+            context.read<LoginBloc>().add(const LoginSubmitted());
+          }
+        : null;
+  }
+
+  ButtonStyle buildButtonStyle() {
+    return ButtonStyle(
+      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+      ),
+    );
+  }
+}
+
+class ButtonText extends StatelessWidget {
+  const ButtonText({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20.0),
+      child: const Text(
+        'Начать',
+        style: TextStyle(fontSize: 16),
+      ),
     );
   }
 }

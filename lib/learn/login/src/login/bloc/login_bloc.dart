@@ -7,7 +7,7 @@ import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:meta/meta.dart';
 
-import '../../authentication_repository.dart';
+import '../../authentication/repo/authentication_repository.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';
@@ -30,7 +30,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     final userPhone = UserPhone.dirty(event.userPhone);
     emit(state.copyWith(
       userPhone: userPhone,
-      status: Formz.validate([state.userPhone, userPhone]),
+      status: Formz.validate([userPhone]),
     ));
   }
 
@@ -41,7 +41,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     if (state.status.isValidated) {
       emit(state.copyWith(status: FormzStatus.submissionInProgress));
       try {
-        await _authenticationRepository.logIn(
+        await _authenticationRepository.sendSms(
           userPhone: state.userPhone.value,
         );
         emit(state.copyWith(status: FormzStatus.submissionSuccess));
