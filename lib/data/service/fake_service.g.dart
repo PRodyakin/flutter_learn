@@ -8,7 +8,7 @@ part of 'fake_service.dart';
 
 class _RestClient implements RestClient {
   _RestClient(this._dio, {this.baseUrl}) {
-    baseUrl ??= 'https://5d42a6e2bc64f90014a56ca0.mockapi.io/api/v1/';
+    baseUrl ??= 'https://230d58ab-7959-415f-8d2d-e7c6169fcfb3.mock.pstmn.io/';
   }
 
   final Dio _dio;

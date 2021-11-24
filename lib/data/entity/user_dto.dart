@@ -1,64 +1,85 @@
-/// status : {"value":"reg","settings":{"step":"1"}}
+/// user : {"status":{"value":"calc","param1":1,"param2":1}}
 
 class UserDto {
   UserDto({
-      this.status,});
+      User? user,}){
+    _user = user;
+}
 
   UserDto.fromJson(dynamic json) {
-    status = json['status'] != null ? Status.fromJson(json['status']) : null;
+    _user = json['user'] != null ? User.fromJson(json['user']) : null;
   }
-  Status? status;
+  User? _user;
+
+  User? get user => _user;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    if (status != null) {
-      map['status'] = status?.toJson();
+    if (_user != null) {
+      map['user'] = _user?.toJson();
     }
     return map;
   }
 
 }
 
-/// value : "reg"
-/// settings : {"step":"1"}
+/// status : {"value":"calc","param1":1,"param2":1}
+
+class User {
+  User({
+      Status? status,}){
+    _status = status;
+}
+
+  User.fromJson(dynamic json) {
+    _status = json['status'] != null ? Status.fromJson(json['status']) : null;
+  }
+  Status? _status;
+
+  Status? get status => _status;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    if (_status != null) {
+      map['status'] = _status?.toJson();
+    }
+    return map;
+  }
+
+}
+
+/// value : "calc"
+/// param1 : 1
+/// param2 : 1
 
 class Status {
   Status({
-      this.value, 
-      this.settings,});
-
-  Status.fromJson(dynamic json) {
-    value = json['value'];
-    settings = json['settings'] != null ? Settings.fromJson(json['settings']) : null;
-  }
-  String? value;
-  Settings? settings;
-
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['value'] = value;
-    if (settings != null) {
-      map['settings'] = settings?.toJson();
-    }
-    return map;
-  }
-
+      String? value, 
+      int? param1, 
+      int? param2,}){
+    _value = value;
+    _param1 = param1;
+    _param2 = param2;
 }
 
-/// step : "1"
-
-class Settings {
-  Settings({
-      this.step,});
-
-  Settings.fromJson(dynamic json) {
-    step = json['step'];
+  Status.fromJson(dynamic json) {
+    _value = json['value'];
+    _param1 = json['param1'];
+    _param2 = json['param2'];
   }
-  String? step;
+  String? _value;
+  int? _param1;
+  int? _param2;
+
+  String? get value => _value;
+  int? get param1 => _param1;
+  int? get param2 => _param2;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['step'] = step;
+    map['value'] = _value;
+    map['param1'] = _param1;
+    map['param2'] = _param2;
     return map;
   }
 

@@ -5,7 +5,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:retrofit/http.dart';
 part 'fake_service.g.dart';
 
-@RestApi(baseUrl: "https://5d42a6e2bc64f90014a56ca0.mockapi.io/api/v1/")
+@RestApi(baseUrl: "https://230d58ab-7959-415f-8d2d-e7c6169fcfb3.mock.pstmn.io/")
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
