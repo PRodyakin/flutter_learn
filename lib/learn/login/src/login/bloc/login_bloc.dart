@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:clean_arch_test/learn/login/src/login/models/password.dart';
 import 'package:clean_arch_test/learn/login/src/login/models/userphone.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';

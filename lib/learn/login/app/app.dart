@@ -2,10 +2,12 @@ import 'package:clean_arch_test/learn/login/src/authentication/authentication_bl
 import 'package:clean_arch_test/learn/login/src/authentication/repo/authentication_repository.dart';
 import 'package:clean_arch_test/learn/login/src/home/home_page.dart';
 import 'package:clean_arch_test/learn/login/src/login/view/login_page.dart';
+import 'package:clean_arch_test/learn/login/src/sms_code/view/sms_code_page.dart';
 import 'package:clean_arch_test/learn/login/src/splash/splash_page.dart';
 import 'package:clean_arch_test/learn/login/src/authentication/repo/user_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class App extends StatelessWidget {
@@ -47,6 +49,15 @@ class _AppViewState extends State<AppView> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        appBarTheme: AppBarTheme(
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarBrightness: Brightness.dark,
+            statusBarIconBrightness: Brightness.dark,
+            statusBarColor: Colors.white10
+          ),
+        ),
+      ),
       navigatorKey: _navigatorKey,
       builder: (context, child) {
         return BlocListener<AuthenticationBloc, AuthenticationState>(

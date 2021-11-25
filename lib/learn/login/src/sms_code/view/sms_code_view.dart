@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:clean_arch_test/learn/login/src/sms_code/bloc/sms_code_bloc.dart';
+import 'package:clean_arch_test/learn/login/src/sms_code/model/sms_code.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,105 +10,88 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 class SmsCodeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
-        child: Column(
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Flexible(
-                child: Icon(Icons.arrow_back),
-              ),
+    return Container(
+      child: Column(
+        children: [
+          Flexible(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                _Title(),
+                const Padding(padding: EdgeInsets.all(10)),
+                Row(
+                  children: [
+                    Flexible(
+                      child: _PinCode(),
+                      flex: 2,
+                    ),
+                    Flexible(
+                      flex: 1,
+                      child: Padding(
+                        padding: EdgeInsets.zero,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
-            Flexible(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  _Title(),
-                  const Padding(padding: EdgeInsets.all(10)),
-                  _PinCode(),
-                ],
-              ),
+          ),
+          Flexible(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                _LoginButton(),
+                Padding(padding: EdgeInsets.all(10)),
+              ],
             ),
-            Flexible(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  _LoginButton(),
-                  Padding(padding: EdgeInsets.all(10)),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 }
 
 class _PinCode extends StatelessWidget {
-  const _PinCode({
+  _PinCode({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return PinCodeTextField(
-      appContext: context,
-      pastedTextStyle: TextStyle(
-        color: Colors.green.shade600,
-        fontWeight: FontWeight.bold,
-      ),
-      length: 6,
-      obscureText: false,
-      obscuringCharacter: '*',
-      animationType: AnimationType.fade,
-      validator: (v) {
-        if (v == null || v.length < 3) {
-          return "I'm from validator";
-        } else {
-          return null;
-        }
-      },
-      pinTheme: PinTheme(
-        shape: PinCodeFieldShape.box,
-        borderRadius: BorderRadius.circular(5),
-        fieldHeight: 60,
-        fieldWidth: 50,
-        activeFillColor: hasError ? Colors.orange : Colors.white,
-      ),
-      cursorColor: Colors.black,
-      animationDuration: Duration(milliseconds: 300),
-      textStyle: TextStyle(fontSize: 20, height: 1.6),
-      backgroundColor: Colors.blue.shade50,
-      enableActiveFill: true,
-      errorAnimationController: errorController,
-      controller: textEditingController,
-      keyboardType: TextInputType.number,
-      boxShadows: [
-        BoxShadow(
-          offset: Offset(0, 1),
-          color: Colors.black12,
-          blurRadius: 10,
-        )
-      ],
-      onCompleted: (v) {
-        print("Completed");
-      },
-      // onTap: () {
-      //   print("Pressed");
-      // },
-      onChanged: (value) {
-        print(value);
-        setState(() {
-          currentText = value;
-        });
-      },
-      beforeTextPaste: (text) {
-        print("Allowing to paste $text");
-        //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
-        //but you can show anything you want here, like your pop up saying wrong paste format or etc
-        return true;
+    return BlocBuilder<SmsCodeBloc, SmsCodeState>(
+      buildWhen: (previous, current) => previous.status != current.status,
+      builder: (context, state) {
+        return PinCodeTextField(
+          length: SmsCode.SMS_CODE_LENGTH,
+          obscureText: false,
+          animationType: AnimationType.fade,
+          keyboardType: TextInputType.numberWithOptions(decimal: false),
+          pinTheme: PinTheme(
+            shape: PinCodeFieldShape.box,
+            borderRadius: BorderRadius.circular(5),
+            activeFillColor: Colors.white,
+            selectedColor: Colors.white,
+            selectedFillColor: Colors.white,
+            inactiveColor: Colors.white,
+            inactiveFillColor: Colors.white,
+            activeColor: Colors.blue
+          ),
+          animationDuration: Duration(milliseconds: 300),
+          enableActiveFill: true,
+          onCompleted: (v) {
+            print("Completed");
+          },
+          onChanged: (value) {
+            context.read<SmsCodeBloc>().add(SmsCodeInputFinished(value));
+          },
+          beforeTextPaste: (text) {
+            print("Allowing to paste $text");
+            //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
+            //but you can show anything you want here, like your pop up saying wrong paste format or etc
+            return true;
+          },
+          appContext: context,
+        );
       },
     );
   }
