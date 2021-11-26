@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:clean_arch_test/learn/login/src/sms_code/bloc/sms_code_bloc.dart';
 import 'package:clean_arch_test/learn/login/src/sms_code/model/sms_code.dart';
+import 'package:clean_arch_test/learn/login/src/timer_button/view/timer_button_widget.dart';
+import 'package:clean_arch_test/learn/login/src/timer_button/view/timer_button_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -119,11 +121,12 @@ class _LoginButton extends StatelessWidget {
           alignment: Alignment.bottomCenter,
           child: SizedBox(
             width: double.infinity,
-            child: ElevatedButton(
+            child: TimerButtonWidget(
               key: const Key('loginForm_continue_raisedButton'),
-              child: ButtonText(),
               style: buildButtonStyle(),
               onPressed: onPressed(state, context),
+              activeText: Text("Отправить код повторно"),
+              inactiveText: Text("Запросить через"),
             ),
           ),
         );

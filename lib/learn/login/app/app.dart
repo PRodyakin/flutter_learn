@@ -5,6 +5,8 @@ import 'package:clean_arch_test/learn/login/src/login/view/login_page.dart';
 import 'package:clean_arch_test/learn/login/src/sms_code/view/sms_code_page.dart';
 import 'package:clean_arch_test/learn/login/src/splash/splash_page.dart';
 import 'package:clean_arch_test/learn/login/src/authentication/repo/user_repository.dart';
+import 'package:clean_arch_test/learn/login/src/timer_button/bloc/timer_button_cubit.dart';
+import 'package:clean_arch_test/learn/login/src/timer_button/utils/ticker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,11 +26,21 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return RepositoryProvider.value(
       value: authenticationRepository,
-      child: BlocProvider(
-        create: (_) => AuthenticationBloc(
-          authenticationRepository: authenticationRepository,
-          userRepository: userRepository,
-        ),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => AuthenticationBloc(
+              authenticationRepository: authenticationRepository,
+              userRepository: userRepository,
+            ),
+          ),
+          BlocProvider(
+            create: (context) => TimerButtonCubit(
+              Ticker(),
+              10,
+            ),
+          )
+        ],
         child: AppView(),
       ),
     );
@@ -52,10 +64,9 @@ class _AppViewState extends State<AppView> {
       theme: ThemeData(
         appBarTheme: AppBarTheme(
           systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarBrightness: Brightness.dark,
-            statusBarIconBrightness: Brightness.dark,
-            statusBarColor: Colors.white10
-          ),
+              statusBarBrightness: Brightness.dark,
+              statusBarIconBrightness: Brightness.dark,
+              statusBarColor: Colors.white10),
         ),
       ),
       navigatorKey: _navigatorKey,
