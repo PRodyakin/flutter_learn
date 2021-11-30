@@ -14,39 +14,42 @@ part 'sms_code_event.dart';
 part 'sms_code_state.dart';
 
 class SmsCodeBloc extends Bloc<SmsCodeEvent, SmsCodeState> {
-  SmsCodeBloc() : super(SmsCodeState()) {
-    final authRepo = sl<AuthenticationRepository>();
+  final authRepo = sl<AuthenticationRepository>();
 
+  SmsCodeBloc() : super(SmsCodeState()) {
     on<SmsCodeInputFinished>(_onSmsCodeInputFinished);
     on<SmsCodeSubmitted>(_onSmsCodeSubmitted);
     on<SmsCodeRequested>(_onSmsCodeRequested);
   }
 
-  void _onSmsCodeInputFinished(SmsCodeInputFinished event, emit) {
-
-    if(event.smsCode.length < SmsCode.SMS_CODE_LENGTH){
+  Future<void> _onSmsCodeInputFinished(SmsCodeInputFinished event, emit) async {
+    //TODO validate on backend
+    if (event.smsCode.length < SmsCode.SMS_CODE_LENGTH) {
       return;
     }
 
     var smsCode = SmsCode.dirty(event.smsCode);
 
-    state.copyWith(
+    emit(state.copyWith(
       status: Formz.validate([smsCode]),
       smsCode: smsCode,
-    );
+    ));
+    add(SmsCodeSubmitted());
+
   }
 
-  FutureOr<void> _onSmsCodeSubmitted(
-      SmsCodeSubmitted event, Emitter<SmsCodeState> emit) {
-    //repo send code
-
-    //start timer
+  Future<void> _onSmsCodeSubmitted(
+      SmsCodeSubmitted event, Emitter<SmsCodeState> emit) async {
+    if (state.status.isValid) {
+      await authRepo.logIn(smsCode: state.smsCode.value);
+      emit(state.copyWith(status: FormzStatus.submissionSuccess));
+    }
   }
 
   FutureOr<void> _onSmsCodeRequested(
       SmsCodeRequested event, Emitter<SmsCodeState> emit) {
     // repo request code
 
-    // repo start timer
+    // start timer
   }
 }

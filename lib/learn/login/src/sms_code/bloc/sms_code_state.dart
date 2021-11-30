@@ -22,5 +22,5 @@ class SmsCodeState extends Equatable{
 
 
   @override
-  List<Object> get props => [smsCode];
+  List<Object> get props => [smsCode, status];
 }

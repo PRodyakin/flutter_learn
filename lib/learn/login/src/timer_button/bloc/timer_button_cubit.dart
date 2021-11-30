@@ -31,10 +31,6 @@ class TimerButtonCubit extends Cubit<TimerButtonState> {
   }
 
   _onTick(int duration) {
-    if (duration <= _TIMER_END) {
-      emit(TimerButtonState(duration, false));
-    } else {
-      emit(TimerButtonState(duration, true));
-    }
+    emit(TimerButtonState(duration, duration > _TIMER_END));
   }
 }

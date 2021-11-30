@@ -20,7 +20,7 @@ class LoginForm extends StatelessWidget {
             );
         }
         if(state.status.isSubmissionSuccess){
-          Navigator.push(context, MaterialPageRoute<void>(builder: (_) => SmsCodePage()));
+          Navigator.push(context, SmsCodePage.route());
         }
       },
       child: SafeArea(

@@ -17,13 +17,18 @@ class AuthenticationRepository {
     yield* _controller.stream;
   }
 
-  Future<void> logIn({
-    required String userPhone,
-  }) async {
-    await Future.delayed(
-      const Duration(milliseconds: 300),
-      () => _controller.add(AuthenticationStatus.authenticated),
-    );
+  String? get smsCode => prefs.getString("sms_code");
+
+  set smsCode(String? value) => prefs.setString("sms_code", value ?? "");
+
+  String? get userPhone => prefs.getString("user_phone");
+
+  set userPhone(String? value) => prefs.setString("user_phone", value ?? "");
+
+  Future<void> logIn({required String smsCode}) async {
+    //TODO send auth request, take phone from cache
+    await Future.delayed(const Duration(milliseconds: 300),
+        () => {_controller.add(AuthenticationStatus.authenticated)});
   }
 
   Future<void> sendSms({
@@ -32,7 +37,8 @@ class AuthenticationRepository {
     await Future.delayed(
       const Duration(milliseconds: 2000),
       () => {
-        prefs.setString("sms_code", "0000"),
+        smsCode = "0000",  // TODO for testing
+        this.userPhone = userPhone,
       },
     );
   }

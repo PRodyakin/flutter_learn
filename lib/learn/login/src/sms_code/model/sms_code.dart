@@ -14,6 +14,6 @@ class SmsCode extends FormzInput<String, SmsCodeValidationError> {
       return null;
     }
 
-    return value.length < SMS_CODE_LENGTH ? null : SmsCodeValidationError.empty;
+    return value.length == SMS_CODE_LENGTH ? null : SmsCodeValidationError.empty;
   }
 }

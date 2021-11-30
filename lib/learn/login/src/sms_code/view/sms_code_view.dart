@@ -7,6 +7,7 @@ import 'package:clean_arch_test/learn/login/src/timer_button/view/timer_button_w
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class SmsCodeView extends StatelessWidget {
@@ -69,23 +70,17 @@ class _PinCode extends StatelessWidget {
           animationType: AnimationType.fade,
           keyboardType: TextInputType.numberWithOptions(decimal: false),
           pinTheme: PinTheme(
-            shape: PinCodeFieldShape.box,
-            borderRadius: BorderRadius.circular(5),
-            activeFillColor: Colors.white,
-            selectedColor: Colors.white,
-            selectedFillColor: Colors.white,
-            inactiveColor: Colors.white,
-            inactiveFillColor: Colors.white,
-            activeColor: Colors.blue
-          ),
+              shape: PinCodeFieldShape.box,
+              borderRadius: BorderRadius.circular(5),
+              activeFillColor: state.status.isValid ? Colors.orange : Colors.white,
+              selectedColor: Colors.white,
+              selectedFillColor: Colors.white,
+              inactiveColor: Colors.white,
+              inactiveFillColor: Colors.white,
+              activeColor: Colors.blue),
           animationDuration: Duration(milliseconds: 300),
           enableActiveFill: true,
-          onCompleted: (v) {
-            print("Completed");
-          },
-          onChanged: (value) {
-            context.read<SmsCodeBloc>().add(SmsCodeInputFinished(value));
-          },
+          onCompleted: (v) => _onCompleted(context, v),
           beforeTextPaste: (text) {
             print("Allowing to paste $text");
             //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
@@ -93,9 +88,16 @@ class _PinCode extends StatelessWidget {
             return true;
           },
           appContext: context,
+          onChanged: (String value) {},
         );
       },
     );
+  }
+
+  SmsCodeBloc getBloc(BuildContext context) => context.read<SmsCodeBloc>();
+
+  _onCompleted(BuildContext context, String code) {
+    getBloc(context).add(SmsCodeInputFinished(code));
   }
 }
 
@@ -135,6 +137,7 @@ class _LoginButton extends StatelessWidget {
   }
 
   onPressed(SmsCodeState state, BuildContext context) {
+    //TODO call new sms code
     return null;
   }
 
